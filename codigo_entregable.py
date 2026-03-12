@@ -62,22 +62,38 @@ class Nave:
 
 
 class Almacen:
+    " Almacen con catalogo propio de piezas de repuesto"
     def __init__(self, nombre, ub_localizacion):
         self.nombre = nombre
         self.loc = ub_localizacion
-        self.cat_rep = {}
+        self.cat_rep = dict[str,Pieza] = {}
     
     def devuelveAlmacen(self):
         return f"Nombre: {self.nombre} \tLocalización: {self.loc}"
     
-    def añadirStock(self, nombre, cantidad):
+    def anyadirStock(self, nombre, cantidad):
         for s in self.cat_rep:
             if (s == nombre):
                 self.cat_rep[nombre] += cantidad
                 return
         print(f"No existe la pieza {nombre}")
     
-    
+    def anyadir_pieza(self,pieza):
+        if pieza.nombre in self.cat_rep:
+            print(f"almacen {self.nombre}  La pieza :{pieza.nombre} ya existe en el catalogo")
+        else:
+            self.cat_rep[pieza.nombre]=pieza
+            print(f"Almacen {self.nombre} pieza{pieza.nombre} añadida al catalogo")
+
+    def retirar_repuesto(self,nombre,cantidad):
+        """   retira unidades de una pieza y devuelve el coste total"""
+        if nombre not in self.cat_rep:
+            raise RepuestoNoEncontradoError(f"ALmacen {self.nombre} pieza {nombre} no encontrada")
+        pieza = self.cat_rep[nombre]
+        pieza.retirar_stock(cantidad)
+        coste = pieza.precio * cantidad
+        return coste
+
 class Estacion_Espacial(Nave,Uni_Comb):
     def __init__(self, nombre, tripulacion, ubicacion, pasaje, id_combate, clave_transmision):
         Nave.__init__(self, nombre)
@@ -158,4 +174,11 @@ class Milmprerio:
                 print(f"Almacen {nombre} ya existe en el sistema")
                 return
         self.almacenes.append(Almacen(nombre, localizacion))
-    def 
+    def get_almacen(self,nombre):
+        for a in self.almacenes:
+            if a.nombre == nombre :  # comparamos que los nombres coinciden
+                return a
+        raise RepuestoNoEncontradoError(f"Almacen {nombre} no encontrado")
+    
+                 
+

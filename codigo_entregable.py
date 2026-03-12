@@ -122,3 +122,11 @@ class Milmprerio:
     def __init__(self):
         self.repuestos = []
         self.almacenes = []
+    
+    def add_Almacen(self, nombre, localizacion):
+        for a in self.almacenes:
+            if a == nombre:
+                print(f"Almacen {nombre} ya existe en el sistema")
+                return
+        self.almacenes.append(Almacen(nombre, localizacion))
+    

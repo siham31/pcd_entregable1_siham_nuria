@@ -11,6 +11,9 @@ class EClase(Enum):
     EJECUTOR = 0,
     ECLIPSE = 1,
     SOBERANO = 2
+
+
+
 # implemetamos las excepciones 
 class StockInsuficienteError(Exception):
     """ Se lanza cuando no hay suficientes stock de una pieza para atender a un pedido"""
@@ -21,11 +24,13 @@ class RepuestoNoEncontradoError(Exception):
     """
     pass
 
+class AlmacenNoEncontradoError(Exception):
+    """"Se lamza cuando se busca un almacen que no existe en el listado de almacenes"""
+
 class AlmacenDuplicadoError(Exception):
     """Se lanza cuando se intenta añadir un almacén que ya existe."""
     pass
- 
- 
+
 class NaveNoEncontradaError(Exception):
     """Se lanza cuando se intenta operar sobre una nave no registrada."""
     pass
@@ -171,14 +176,28 @@ class Milmprerio:
     def add_Almacen(self, nombre, localizacion):
         for a in self.almacenes:
             if a == nombre:
-                print(f"Almacen {nombre} ya existe en el sistema")
-                return
+                raise AlmacenDuplicadoError(f"El almacen con nombre {a} ya está registrado en el sistema")
         self.almacenes.append(Almacen(nombre, localizacion))
+        
+        
     def get_almacen(self,nombre):
         for a in self.almacenes:
             if a.nombre == nombre :  # comparamos que los nombres coinciden
                 return a
         raise RepuestoNoEncontradoError(f"Almacen {nombre} no encontrado")
     
-                 
-
+    def listarAlmacen(self):
+        if len(self.almacenes) == 0:
+            print(f"No hay almacenes registrados en el sistema")
+            return
+        for a in self.almacenes:
+            print(a.devuelveAlmacen)
+    
+    def listarRepuestos(self):
+        if len(self.repuestos) == 0:
+            print("No hay piezas registradas en el sistema")
+            return
+        for p in self.repuestos:
+            print(p.devuelvePieza)
+    
+    def 

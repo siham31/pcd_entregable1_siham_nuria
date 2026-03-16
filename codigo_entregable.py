@@ -3,13 +3,13 @@ from abc import ABCMeta, abstractmethod
 
 # Implementamos las enumeraciones
 class EUbicacion(Enum):
-    ENDOR = 0,
-    CUMULO_RAIMOS = 1,
+    ENDOR = 0
+    CUMULO_RAIMOS = 1
     NEBULOSA_KALIIDA = 2
 
 class EClase(Enum):
-    EJECUTOR = 0,
-    ECLIPSE = 1,
+    EJECUTOR = 0
+    ECLIPSE = 1
     SOBERANO = 2
 
 
@@ -94,7 +94,7 @@ class Almacen:
     def __init__(self, nombre, ub_localizacion):
         self.nombre = nombre
         self.loc = ub_localizacion
-        self.cat_rep = []
+        self.cat_rep = [] # catalogo 
     
     def devuelveAlmacen(self):
         return f"Nombre: {self.nombre} \tLocalización: {self.loc}"
@@ -299,3 +299,111 @@ class Milmprerio:
                 for p in a.cat_rep:
                     print(f"-\t{p}")
             raise AlmacenNoEncontradoError(f"El almacen {almacen} no se encuentra registrado en el sistema")
+        
+
+
+
+
+def main():
+
+    sistema = Milmprerio()
+
+    # -------------------------
+    # PRUEBA 1: Crear almacenes
+    # -------------------------
+    print("PRUEBA 1: Crear almacenes")
+
+    sistema.addAlmacen("Almacen_1", EUbicacion.ENDOR)
+    sistema.addAlmacen("Almacen_2", EUbicacion.NEBULOSA_KALIIDA)
+
+    sistema.listarAlmacen()
+
+
+    # -------------------------
+    # PRUEBA 2: Añadir repuestos
+    # -------------------------
+    print("\nPRUEBA 2: Añadir repuestos")
+
+    sistema.addRepuesto("Motor", "Kuat Drive Yards", 5000, 10, "Almacen_1")
+    sistema.addRepuesto("Laser", "BlasTech", 2000, 5, "Almacen_1")
+
+    sistema.getRepuesto("Motor", "Almacen_1")
+
+
+    # -------------------------
+    # PRUEBA 3: Error repuesto duplicado
+    # -------------------------
+    print("\nPRUEBA 3: Repuesto duplicado")
+
+    try:
+        sistema.addRepuesto("Motor", "Kuat Drive Yards", 5000, 10, "Almacen_1")
+    except RepuestoDuplicadoError as e:
+        print(e)
+
+
+    # -------------------------
+    # PRUEBA 4: Error almacen inexistente
+    # -------------------------
+    print("\nPRUEBA 4: Almacen no encontrado")
+
+    try:
+        sistema.addRepuesto("Escudo", "Sienar", 3000, 3, "Almacen_X")
+    except AlmacenNoEncontradoError as e:
+        print(e)
+
+
+    # -------------------------
+    # PRUEBA 5: Crear naves
+    # -------------------------
+    print("\nPRUEBA 5: Crear naves")
+
+    nave1 = Nave_Estelar(
+        "Destructor Imperial",
+        47000,
+        1000,
+        EClase.EJECUTOR,
+        12345,
+        999
+    )
+
+    print(nave1.devuelveInfo())
+
+
+    estacion = Estacion_Espacial(
+        "Estrella de la Muerte",
+        200000,
+        EUbicacion.CUMULO_RAIMOS,
+        10000,
+        9999,
+        8888
+    )
+
+    print(estacion.devuelveInfo())
+
+
+    caza = Caza_Estelar(
+        "TIE Fighter",
+        1,
+        111,
+        222
+    )
+
+    print(caza.devuelveInfo())
+
+
+if __name__ == "__main__":
+    main()
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -85,7 +85,7 @@ class Nave:
         return "Nave: " + self.nombre
     
     def devuelvePiezasRep(self):
-        for p,c in self.piezas_rep.items:
+        for p,c in self.piezas_rep.items():
             print("Nombre: ", p, "\tCantidad: ", c)
 
 
@@ -120,12 +120,14 @@ class Almacen:
 
     def retirar_repuesto(self,nombre,cantidad):
         """retira unidades de una pieza y devuelve el coste total"""
-        if nombre not in self.cat_rep:
-            raise RepuestoNoEncontradoError(f"En el almacen {self.nombre}: pieza {nombre} no encontrada")
-        
         for p in self.cat_rep:
             if p.nombre == nombre:
-                pieza = p.nombre
+        #if nombre not in self.cat_rep:
+                raise RepuestoNoEncontradoError(f"En el almacen {self.nombre}: pieza {nombre} no encontrada")
+        
+        for p in self.cat_rep: # pieza es un string
+            if p.nombre == nombre:
+                pieza = p
                 pieza.cantidad -= cantidad
                 coste = pieza.precio * cantidad
                 return coste
@@ -227,7 +229,7 @@ class Milmprerio:
             print(f"No hay almacenes registrados en el sistema")
             return
         for a in self._almacenes:
-            print(a.devuelveAlmacen)
+            print(a.devuelveAlmacen())
     
     def quitarAlmacen(self, nombre):
         """Eliminar el almacen nombre del listado self._almacenes"""

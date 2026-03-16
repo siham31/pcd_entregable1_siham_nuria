@@ -119,7 +119,7 @@ class Almacen:
                 print(f"Almacen {self.nombre} pieza{pieza.nombre} añadida al catalogo")
 
     def retirar_repuesto(self,nombre,cantidad):
-        """   retira unidades de una pieza y devuelve el coste total"""
+        """retira unidades de una pieza y devuelve el coste total"""
         if nombre not in self.cat_rep:
             raise RepuestoNoEncontradoError(f"En el almacen {self.nombre}: pieza {nombre} no encontrada")
         
@@ -247,7 +247,7 @@ class Milmprerio:
             if a.nombre == almacen:
                 catalogo = a.cat_rep
                 
-                for p in catalogo.keys():
+                for p in catalogo:
                     if p.nombre == nombre:
                         raise RepuestoDuplicadoError(f"La pieza {nombre} ya existe en el almacen {almacen}")
                 
@@ -257,7 +257,7 @@ class Milmprerio:
         raise AlmacenNoEncontradoError(f"El almacen {almacen} no se encuentra registrado")
     
     def getRepuesto(self, nombre, almacen):
-        """Ver si la pieza (nombre) en el almacen (almacen)"""
+        """Ver si la pieza (nombre) está en el almacen (almacen)"""
         for a in self._almacenes:
             if a.nombre == almacen:
                 catalogo = a.cat_rep 
@@ -273,8 +273,7 @@ class Milmprerio:
         """Listar todas las piezas de repuestos registrados en el sistema"""
         if len(self._repuestos) == 0:
             raise ValueError(f"No hay piezas registradas en el sistema")
-            #print("No hay piezas registradas en el sistema")
-            #return
+        
         for p in self._repuestos:
             print(p.devuelvePieza)
     
@@ -299,4 +298,4 @@ class Milmprerio:
                 print(f"Listado de stock en el almacen {almacen}")
                 for p in a.cat_rep:
                     print(f"-\t{p}")
-            raise AlmacenNoEncontradoError(f"El almacen {almacen} no se encuentra registardo en el sistema")
+            raise AlmacenNoEncontradoError(f"El almacen {almacen} no se encuentra registrado en el sistema")

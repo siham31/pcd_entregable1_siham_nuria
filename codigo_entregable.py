@@ -94,7 +94,7 @@ class Almacen:
     def __init__(self, nombre, ub_localizacion):
         self.nombre = nombre
         self.loc = ub_localizacion
-        self.cat_rep = [] # catalogo 
+        self.cat_rep = []  # catalogo 
     
     def devuelveAlmacen(self):
         return f"Nombre: {self.nombre} \tLocalización: {self.loc}"
@@ -113,10 +113,10 @@ class Almacen:
     def anyadir_pieza(self,pieza, proveedor, precio, cantidad):
         for p in self.cat_rep:
             if p.nombre == pieza:
-                print(f"Almacen {self.nombre}: pieza :{pieza.nombre} ya existe en el catalogo")
-            else:
-                self.cat_rep.append(Pieza(pieza, proveedor, precio, cantidad))
-                print(f"Almacen {self.nombre} pieza{pieza.nombre} añadida al catalogo")
+                raise RepuestoDuplicadoError(f'Almacen: {self.nombre}: pieza {pieza} ya existe ya está registrado')             
+            
+        self.cat_rep.append(Pieza(pieza, proveedor, precio, cantidad))
+        print(f"Almacen {self.nombre} pieza{p.nombre} añadida al catalogo")
 
     def retirar_repuesto(self,nombre,cantidad):
         """retira unidades de una pieza y devuelve el coste total"""

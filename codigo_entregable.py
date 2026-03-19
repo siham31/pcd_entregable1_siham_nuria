@@ -120,13 +120,13 @@ class Almacen:
 
     def retirar_repuesto(self,nombre,cantidad):
         """retira unidades de una pieza y devuelve el coste total"""
-        for p in self.cat_rep:
-            if p.nombre == nombre:
-        #if nombre not in self.cat_rep:
-                raise RepuestoNoEncontradoError(f"En el almacen {self.nombre}: pieza {nombre} no encontrada")
+        if cantidad < 0:
+            raise ValueError("La cantidad introducida está en el formato incorrecto")
         
         for p in self.cat_rep: # pieza es un string
             if p.nombre == nombre:
+                if p.cantidad < cantidad:
+                    raise StockInsuficienteError(f"La cantidad que desea retirar al disponible")
                 pieza = p
                 pieza.cantidad -= cantidad
                 coste = pieza.precio * cantidad

@@ -1,0 +1,18 @@
+import pytest
+from codigo_entregable import Nave
+
+# Definimos una lista que vamos a usar en los siguientes tests
+@pytest.fixture
+def lista_naves():
+    # Creamos naves
+    return [
+            Nave('Enterprise',{'Motor':1, 'Filtro': 4}),
+            Nave('Serenity', {'Placa':10}),		    
+            Nave('Nostromo', {'Pistones': 6}),
+            Nave('Rocinante')
+            ]
+
+
+def test_devolverNave(lista_naves):
+    nave1 = lista_naves[0] 
+    assert nave1.devuelveNave() == 'Nave: Enterprise'

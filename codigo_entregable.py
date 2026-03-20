@@ -79,12 +79,12 @@ class Uni_Comb(metaclass=ABCMeta):
 class Nave:
     def __init__(self, nombre):
         self.nombre = nombre
-        self.piezas_rep = {} = {str:int}
+        self.piezas_rep: dict[str:int] = {}  
     
     def devuelveNave(self):
         return "Nave: " + self.nombre
     
-    def devuelvePiezasRep(self):
+    def devuelvePiezaRep(self):
         for p,c in self.piezas_rep.items():
             print("Nombre: ", p, "\tCantidad: ", c)
             
@@ -92,11 +92,11 @@ class Nave:
         if cantidad < 0: 
             raise ValueError("La cantidad introducida no puede ser negativa")
         
-        for p in self.piezas_rep:
-            if p == nombre:
-                raise RepuestoDuplicadoError("La pieza {nombre} ya está registrado")
+        if nombre in self.piezas_rep:
+            raise RepuestoDuplicadoError(f"La pieza {nombre} ya está registrado")
         
-        self.re
+        self.piezas_rep[nombre] = cantidad
+        print(f"La pieza {nombre} se ha añadido con éxito")
 
 class Almacen:
     " Almacen con catalogo propio de piezas de repuesto"

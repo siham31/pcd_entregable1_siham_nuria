@@ -15,7 +15,7 @@ def test_creacion_pieza(pieza):
 
 # Funcion: devuelvePieza
 def test_devuelvePieza(pieza):
-    resultado = pieza.devuelevePieza()
+    resultado = pieza.devuelvePieza()
     assert "Nombre: Motor" in resultado
     assert "Cantidad disponible: 5" in resultado
     assert "Proveedor: proveedor1" in resultado
@@ -37,11 +37,11 @@ def test_get_cantidad(pieza):
 def test_set_cantidad(pieza):
     pieza.set_cantidad(6)
     
-    assert pieza.cant_rep == 6
+    assert pieza.cant_disp == 6
 
 def test_error_set_cantidad_negativa(pieza):
     
     with pytest.raises(ValueError) as exinfo:
         pieza.set_cantidad(-1)
     
-    assert exinfo == 'la cantidad no puede ser negativa'
+    assert str(exinfo.value) == 'la cantidad no puede ser negativa'

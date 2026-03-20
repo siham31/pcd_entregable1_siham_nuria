@@ -1,5 +1,5 @@
 import pytest
-from codigo_entregable import Nave, Pieza
+from codigo_entregable import Nave, RepuestoDuplicadoError
 
 # Definimos una lista que vamos a usar en los siguientes tests
 @pytest.fixture
@@ -10,26 +10,56 @@ def nave():
 # Definimos una lista de piezas de repuesto
 @pytest.fixture
 def piezas():
-    return [Pieza('Filtro', 'prov1', 11, 10),
-            Pieza('Motor', 'prov2', 11, 10),
-            Pieza('Depósito', 'prov3', 11, 10),
-            Pieza('Reactor', 'prov4', 11, 10),
-            Pieza('Antena', 'prov5', 11, 10),
-            Pieza('Sensor', 'prov6', 11, 10),
-            Pieza('Bláster', 'prov7', 11, 10),
-            Pieza('Torreta', 'prov8', 11, 10)
+    return [
+            'Filtro', 'Motor', 'Depósito','Reactor',
+            'Antena', 'Sensor', 'Bláster', 'Torreta'
             ]
 
-
 # Funcion: __init__
-def test_creacion_Nave(nave, piezas):
+def test_creacion_Nave(nave):
     assert nave.nombre == 'Enterprise'
 
-def test_devolverNave(lista_naves):
-    nave1 = lista_naves[0] 
-    
-    assert nave1.devuelveNave() == 'Nave: Enterprise'
+# Funcion: devuelveNave
+def test_devuelveNave(nave):
+    assert nave.devuelveNave() == 'Nave: Enterprise'
 
 # Funcion: devuelvePiezasRep
-def test_devuelvePiezasRep():
+def test_devuelvePiezasRep(nave, piezas):
+    pieza = piezas[0]
+    nave.anyadir_Pieza(pieza, 1)
     
+    capsys.readouterr()
+    
+    pieza.devuelvePiezaRep()
+    captured = capsys.readouterr()
+    
+    assert "Nombre: Filtro" in captured.out
+    assert "Cantidad: 1" in captured.out
+    
+
+# Funcion anyadir_Pieza
+def test_anyadir_Pieza(nave, piezas):
+    for p in piezas:
+        nave.anyadir_Pieza(p, 1)
+    
+    assert 'Filtro' in nave.piezas_rep
+    assert 'Torreta' in nave.piezas_rep
+    assert nave.piezas_rep['Filtro'] == 1
+    assert nave.piezas_rep['Torreta'] == 1
+    assert len(nave.piezas_rep) == len(piezas)
+
+def test_error_anyadir_Pieza_cantidad_negativa(nave, piezas):
+    with pytest.raises(ValueError) as exinfo:
+        nave.anyadir_Pieza(piezas[0], -1)
+    
+    assert str(exinfo.value) == "La cantidad introducida no puede ser negativa"
+
+def test_error_anyadir_Pieza_repuesto_duplicado(nave, piezas):
+    pieza = piezas[0]
+    for p in piezas:
+        nave.anyadir_Pieza(p, 1)
+    
+    with pytest.raises(RepuestoDuplicadoError) as exinfo:
+        nave.anyadir_Pieza(pieza, 1)
+    
+    assert str(exinfo.value) == f"La pieza {pieza} ya está registrado"

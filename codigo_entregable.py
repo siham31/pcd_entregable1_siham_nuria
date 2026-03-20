@@ -152,7 +152,7 @@ class Almacen:
         raise RepuestoNoEncontradoError(f"La pieza {nombre} no se ha encontrado")
 
 class Estacion_Espacial(Nave,Uni_Comb):
-    def __init__(self, nombre, tripulacion, ubicacion, pasaje, id_combate, clave_transmision):
+    def __init__(self, nombre:str, tripulacion:int, ubicacion:str, pasaje: float, id_combate:str, clave_transmision:str):
         Nave.__init__(self, nombre)
         Uni_Comb.__init__(self, id_combate, clave_transmision)
         self.tripulacion = tripulacion

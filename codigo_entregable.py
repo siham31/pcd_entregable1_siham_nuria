@@ -79,7 +79,7 @@ class Uni_Comb(metaclass=ABCMeta):
 class Nave:
     def __init__(self, nombre):
         self.nombre = nombre
-        self.piezas_rep = {}
+        self.piezas_rep = {} = {str:int}
     
     def devuelveNave(self):
         return "Nave: " + self.nombre
@@ -87,7 +87,16 @@ class Nave:
     def devuelvePiezasRep(self):
         for p,c in self.piezas_rep.items():
             print("Nombre: ", p, "\tCantidad: ", c)
-
+            
+    def anyadir_Pieza(self, nombre, cantidad):
+        if cantidad < 0: 
+            raise ValueError("La cantidad introducida no puede ser negativa")
+        
+        for p in self.piezas_rep:
+            if p == nombre:
+                raise RepuestoDuplicadoError("La pieza {nombre} ya está registrado")
+        
+        self.re
 
 class Almacen:
     " Almacen con catalogo propio de piezas de repuesto"
@@ -99,7 +108,7 @@ class Almacen:
     def devuelveAlmacen(self):
         return f"Nombre: {self.nombre} \tLocalización: {self.loc}"
     
-    def anyadirStock(self, nombre, cantidad):
+    def anyadirStockPieza(self, nombre, cantidad):
         if cantidad < 0:
             raise ValueError("La cantidad introducida no es correcta")
         
@@ -110,7 +119,7 @@ class Almacen:
                 return
         raise StockNoEncontradoError(f"No existe la pieza {nombre}")
     
-    def anyadir_pieza(self,pieza, proveedor, precio, cantidad):
+    def altaPieza(self,pieza, proveedor, precio, cantidad):
         for p in self.cat_rep:
             if p.nombre == pieza:
                 raise RepuestoDuplicadoError(f'Almacen: {self.nombre}: pieza {pieza} ya está registrado')             
@@ -118,7 +127,7 @@ class Almacen:
         self.cat_rep.append(Pieza(pieza, proveedor, precio, cantidad))
         print(f"Almacen {self.nombre} pieza{p.nombre} añadida al catalogo")
 
-    def retirar_repuesto(self,nombre,cantidad):
+    def retirarStockPieza(self,nombre,cantidad):
         """retira unidades de una pieza y devuelve el coste total"""
         if cantidad < 0:
             raise ValueError("La cantidad introducida está en el formato incorrecto")
@@ -132,6 +141,15 @@ class Almacen:
                 coste = pieza.precio * cantidad
                 return coste
         raise RepuestoNoEncontradoError(f"En el almacen {self.nombre}: pieza {nombre} no se ha encontrado")
+
+    def eliminarPieza(self, nombre):
+        for p in self.cat_rep:
+            if p.nombre == nombre:
+                self.cat_rep.remove(p)
+                mensaje = f"La pieza {nombre} se ha borrado"
+                print(mensaje)
+                return mensaje
+        raise RepuestoNoEncontradoError(f"La pieza {nombre} no se ha encontrado")
 
 class Estacion_Espacial(Nave,Uni_Comb):
     def __init__(self, nombre, tripulacion, ubicacion, pasaje, id_combate, clave_transmision):

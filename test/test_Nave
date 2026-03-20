@@ -1,16 +1,35 @@
 import pytest
-from codigo_entregable import Nave
+from codigo_entregable import Nave, Pieza
 
 # Definimos una lista que vamos a usar en los siguientes tests
 @pytest.fixture
 def nave():
     # Creamos naves
-    return Nave('Enterprise',{'Motor':1, 'Filtro': 4})
+    return Nave('Enterprise')
+
+# Definimos una lista de piezas de repuesto
+@pytest.fixture
+def piezas():
+    return [Pieza('Filtro', 'prov1', 11, 10),
+            Pieza('Motor', 'prov2', 11, 10),
+            Pieza('Depósito', 'prov3', 11, 10),
+            Pieza('Reactor', 'prov4', 11, 10),
+            Pieza('Antena', 'prov5', 11, 10),
+            Pieza('Sensor', 'prov6', 11, 10),
+            Pieza('Bláster', 'prov7', 11, 10),
+            Pieza('Torreta', 'prov8', 11, 10)
+            ]
+
 
 # Funcion: __init__
-def test_creacion_Nave(nave):
-    
+def test_creacion_Nave(nave, piezas):
+    assert nave.nombre == 'Enterprise'
 
 def test_devolverNave(lista_naves):
     nave1 = lista_naves[0] 
+    
     assert nave1.devuelveNave() == 'Nave: Enterprise'
+
+# Funcion: devuelvePiezasRep
+def test_devuelvePiezasRep():
+    

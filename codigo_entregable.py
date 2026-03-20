@@ -113,7 +113,7 @@ class Almacen:
     def anyadir_pieza(self,pieza, proveedor, precio, cantidad):
         for p in self.cat_rep:
             if p.nombre == pieza:
-                raise RepuestoDuplicadoError(f'Almacen: {self.nombre}: pieza {pieza} ya existe ya está registrado')             
+                raise RepuestoDuplicadoError(f'Almacen: {self.nombre}: pieza {pieza} ya está registrado')             
             
         self.cat_rep.append(Pieza(pieza, proveedor, precio, cantidad))
         print(f"Almacen {self.nombre} pieza{p.nombre} añadida al catalogo")
@@ -126,7 +126,7 @@ class Almacen:
         for p in self.cat_rep: # pieza es un string
             if p.nombre == nombre:
                 if p.cantidad < cantidad:
-                    raise StockInsuficienteError(f"La cantidad que desea retirar al disponible")
+                    raise StockInsuficienteError("La cantidad que desea retirar excede la cantidad disponible")
                 pieza = p
                 pieza.cantidad -= cantidad
                 coste = pieza.precio * cantidad

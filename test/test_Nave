@@ -3,15 +3,13 @@ from codigo_entregable import Nave
 
 # Definimos una lista que vamos a usar en los siguientes tests
 @pytest.fixture
-def lista_naves():
+def nave():
     # Creamos naves
-    return [
-            Nave('Enterprise',{'Motor':1, 'Filtro': 4}),
-            Nave('Serenity', {'Placa':10}),		    
-            Nave('Nostromo', {'Pistones': 6}),
-            Nave('Rocinante')
-            ]
+    return Nave('Enterprise',{'Motor':1, 'Filtro': 4})
 
+# Funcion: __init__
+def test_creacion_Nave(nave):
+    
 
 def test_devolverNave(lista_naves):
     nave1 = lista_naves[0] 

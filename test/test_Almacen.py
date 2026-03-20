@@ -13,6 +13,12 @@ def lista_Almacenes():
             Almacen('Foxtrot', 'Ciudadela Flotante de Aethelgard')
             ]
 
+# Funcion: __init__
+def test_creacion_almacen(lista_Almacenes):
+    almacen = lista_Almacenes[0]
+    assert almacen.nombre == 'Alpha'
+    assert almacen.loc == 'Nebulosa de los Suspiros Olvidados'
+
 # Definimos una lista de stock que podemos añadir o quitar 
 @pytest.fixture
 def catalogo():
@@ -52,8 +58,10 @@ def test_error_cantidad_negativa_anyadirStock(lista_Almacenes, catalogo):
     almacen = lista_Almacenes[0]
 
     # En un entorno protegido, vamos ha ver si la ultima linea falla
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError) as exinfo:
         almacen.anyadirStock(stock, -1)
+    
+    assert exinfo == "La cantidad introducida no es correcta"
 
 def test_error_stock_noencontrado_anyadir_Stock(lista_Almacenes, catalogo): 
     almacen = lista_Almacenes[1]
@@ -61,8 +69,10 @@ def test_error_stock_noencontrado_anyadir_Stock(lista_Almacenes, catalogo):
         almacen.anyadirStock(stock, 1)
 
     # En un entorno protegido, vamos a ver si se produce el fallo
-    with pytest.raises(StockNoEncontradoError):
+    with pytest.raises(StockNoEncontradoError) as exinfo:
         almacen.anyadirStock('Ala', 12)
+    
+    assert exinfo == "No existe la pieza Ala"
 
 
 # Funcion: anyadir_pieza
@@ -87,8 +97,10 @@ def test_error_duplicado_anyadir_pieza(lista_Almacenes, catalogo):
         almacen.anyadir_pieza(p, 'proveedor1', 12, 5)
     
     # En un entorno protegido, vamos a ver si se produce el fallo
-    with pytest.raises(RepuestoDuplicadoError):
+    with pytest.raises(RepuestoDuplicadoError) as exinfo:
         almacen.anyadir_pieza(pieza1, 'proveedor1', 12, 5)
+    
+    assert exinfo == 'Almacen Beta: pieza Motor ya esta registrado'
 
 # Funcion: retirar_repuesto
 def test_retirar_repuesto(lista_Almacenes, catalogo):
@@ -115,8 +127,10 @@ def test_error_cantidad_negativa_retirar_repuesto(lista_Almacenes, catalogo):
         almacen.anyadir_pieza(p, 'proveedor1', 12, 5)
     
     # Retiramos una unidad de pieza 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError) as exinfo:
         almacen.retirar_repuesto(pieza, -1)
+    
+    assert exinfo == "La cantidad introducida está en el formato incorrecto"
 
 def test_error_stock_insuficiente_retirar_repuesto(lista_Almacenes, catalogo):
     almacen = lista_Almacenes[2]
@@ -127,8 +141,10 @@ def test_error_stock_insuficiente_retirar_repuesto(lista_Almacenes, catalogo):
         almacen.anyadir_pieza(p, 'proveedor1', 12, 5)
     
     #
-    with pytest.raises(StockInsuficienteError):
+    with pytest.raises(StockInsuficienteError) as exinfo:
         almacen.retirar_repuesto(pieza, 6)
+    
+    assert exinfo == "La cantidad que desea retirar excede la cantidad disponible"
 
 
 def test_error_respuesto_noencontrado_retirar_repuesto(lista_Almacenes, catalogo):
@@ -138,5 +154,7 @@ def test_error_respuesto_noencontrado_retirar_repuesto(lista_Almacenes, catalogo
     for p in catalogo:
         almacen.anyadir_pieza(p, 'proveedor1', 12, 5)
     
-    with pytest.raises(RepuestoNoEncontradoError):
+    with pytest.raises(RepuestoNoEncontradoError) as exinfo:
         almacen.retirar_repuesto('Ala', 1)
+    
+    assert exinfo == "En el almacen Charlie: pieza Ala no se ha encontrado"

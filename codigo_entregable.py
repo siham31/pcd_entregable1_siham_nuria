@@ -36,7 +36,7 @@ class RepuestoVacioError(Exception):
     pass 
 
 class RepuestoDuplicadoError(Exception):
-    """Se lanza cuandi se intenta añadir una pieza (repuesto) ya existe en el almacen
+    """Se lanza cuando se intenta añadir una pieza (repuesto) ya existe en el almacen
     seleccionado"""
     pass
 
@@ -79,7 +79,7 @@ class Uni_Comb(metaclass=ABCMeta):
 class Nave:
     def __init__(self, nombre):
         self.nombre = nombre
-        self.piezas_rep: dict[str:int] = {}  
+        self.piezas_rep: dict[str,int] = {}  
     
     def devuelveNave(self):
         return "Nave: " + self.nombre
@@ -114,7 +114,7 @@ class Almacen:
         
         for s in self.cat_rep:
             if (s.nombre == nombre):
-                s.cantidad += cantidad
+                s.cant_disp += cantidad
                 print("La cantidad ha sido añadido con éxito")
                 return
         raise StockNoEncontradoError(f"No existe la pieza {nombre}")
@@ -123,9 +123,9 @@ class Almacen:
         for p in self.cat_rep:
             if p.nombre == pieza:
                 raise RepuestoDuplicadoError(f'Almacen: {self.nombre}: pieza {pieza} ya está registrado')             
-            
-        self.cat_rep.append(Pieza(pieza, proveedor, precio, cantidad))
-        print(f"Almacen {self.nombre} pieza{p.nombre} añadida al catalogo")
+        nueva_pieza = Pieza(pieza, proveedor, precio, cantidad)    
+        self.cat_rep.append(nueva_pieza)
+        print(f"Almacen {self.nombre} pieza{nueva_pieza.nombre} añadida al catalogo")
 
     def retirarStockPieza(self,nombre,cantidad):
         """retira unidades de una pieza y devuelve el coste total"""
@@ -134,11 +134,10 @@ class Almacen:
         
         for p in self.cat_rep: # pieza es un string
             if p.nombre == nombre:
-                if p.cantidad < cantidad:
+                if p.cant_disp < cantidad:
                     raise StockInsuficienteError("La cantidad que desea retirar excede la cantidad disponible")
-                pieza = p
-                pieza.cantidad -= cantidad
-                coste = pieza.precio * cantidad
+                p.cant_disp -= cantidad
+                coste = p.precio * cantidad
                 return coste
         raise RepuestoNoEncontradoError(f"En el almacen {self.nombre}: pieza {nombre} no se ha encontrado")
 
@@ -158,6 +157,13 @@ class Estacion_Espacial(Nave,Uni_Comb):
         self.tripulacion = tripulacion
         self.ubi = ubicacion
         self.pasaje = pasaje
+
+
+    def devuelve_IdComb(self):
+        return self.id_combate
+ 
+    def devuelve_ClaveTrans(self) -> int:
+        return self.clave_trans
             
     def devuelveInfo(self):
         return f"""Nombre: {self.nombre}\tTripulación: {self.tripulacion}\n
@@ -182,12 +188,24 @@ class Nave_Estelar(Nave,Uni_Comb):
     
     def devuelveClase(self):
         return f"Clase de {self.nombre}: {self.clase}"
+    def devuelve_IdComb(self):
+        return self.id_combate
+
+    def devuelve_ClaveTrans(self) -> int:
+        return self.clave_trans
 
 class Caza_Estelar(Nave,Uni_Comb):
     def __init__(self, nombre, dotacion, id_combate, clave_transmision):
         Nave.__init__(self,nombre)
         Uni_Comb.__init__(self,id_combate, clave_transmision)
         self.dotacion = dotacion
+        
+    def devuelve_IdComb(self):
+        return self.id_combate
+ 
+    def devuelve_ClaveTrans(self) -> int:
+        return self.clave_trans
+    
     
     def devuelveInfo(self):
         return f"""Nombre: {self.nombre}\tDotacion: {self.dotacion}\n
@@ -253,7 +271,7 @@ class Milmprerio:
         """Eliminar el almacen nombre del listado self._almacenes"""
         for a in self._almacenes:
             if a.nombre == nombre:
-                self._almacenes.remove(nombre)
+                self._almacenes.remove(a)
                 return
         raise AlmacenNoEncontradoError(f"El almacen {nombre} no se encuentra registrado")
     
@@ -292,10 +310,10 @@ class Milmprerio:
     def listarRepuestos(self):
         """Listar todas las piezas de repuestos registrados en el sistema"""
         if len(self._repuestos) == 0:
-            raise ValueError(f"No hay piezas registradas en el sistema")
+            raise RepuestoVacioError(f"No hay piezas registradas en el sistema")
         
         for p in self._repuestos:
-            print(p.devuelvePieza)
+            print(p.devuelvePieza())
     
     def quitarRepuesto(self, nombre, almacen): 
         """Quitar la pieza (nombre) del almacen (almacen)"""
@@ -305,7 +323,7 @@ class Milmprerio:
                 
                 for p in catalogo:
                     if p.nombre == nombre:
-                        catalogo.remove(nombre)
+                        catalogo.remove(p)
                         print(f"Eliminado con éxito la pieza {nombre} del almacen {almacen}")
                         return
                 raise RepuestoNoEncontradoError(f"La pieza {nombre} no se encuentra en el almacen {almacen}")
@@ -317,8 +335,9 @@ class Milmprerio:
             if a.nombre == almacen:
                 print(f"Listado de stock en el almacen {almacen}")
                 for p in a.cat_rep:
-                    print(f"-\t{p}")
-            raise AlmacenNoEncontradoError(f"El almacen {almacen} no se encuentra registrado en el sistema")
+                    print(f"-\t{p.devuelvePieza()}")
+                return 
+        raise AlmacenNoEncontradoError(f"El almacen {almacen} no se encuentra registrado en el sistema")
         
 
 

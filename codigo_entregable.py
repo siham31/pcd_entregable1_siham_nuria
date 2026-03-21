@@ -305,7 +305,7 @@ class Milmprerio:
                 for p in catalogo:
                     if p.nombre == nombre:
                         print(f"La pieza {nombre} está en el almacen {almacen}")
-                        return
+                        return p
                 raise RepuestoNoEncontradoError(f"La pieza {nombre} no se encuentra en el almacen {almacen}")
         raise AlmacenNoEncontradoError(f"El almacen {almacen} no se encuentra registrado")
     
@@ -335,9 +335,9 @@ class Milmprerio:
     def listarStocks(self, almacen):
         for a in self._almacenes:
             if a.nombre == almacen:
-                print(f"Listado de stock en el almacen {almacen}")
+                print(f"Listado de stock en el almacen {almacen}:")
                 for p in a.cat_rep:
-                    print(f"-\t{p.devuelvePieza()}")
+                    print(f"\t{p.devuelvePieza()}\n")
                 return 
         raise AlmacenNoEncontradoError(f"El almacen {almacen} no se encuentra registrado en el sistema")
         

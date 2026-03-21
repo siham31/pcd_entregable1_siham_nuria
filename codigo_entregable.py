@@ -262,8 +262,10 @@ class Milmprerio:
     def listarAlmacen(self):
         """Listar todos los almacenes registrados en el sistema"""
         if len(self._almacenes) == 0:
-            print(f"No hay almacenes registrados en el sistema")
-            return
+            mensaje = "No hay almacenes registrados en el sistema"
+            print(mensaje)
+            return mensaje
+        
         for a in self._almacenes:
             print(a.devuelveAlmacen())
     

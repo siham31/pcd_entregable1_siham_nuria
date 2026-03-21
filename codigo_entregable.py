@@ -188,6 +188,11 @@ class Nave_Estelar(Nave,Uni_Comb):
     
     def devuelveClase(self):
         return f"Clase de {self.nombre}: {self.clase}"
+    def devuelve_IdComb(self):
+        return self.id_combate
+
+    def devuelve_ClaveTrans(self) -> int:
+        return self.clave_trans
 
 class Caza_Estelar(Nave,Uni_Comb):
     def __init__(self, nombre, dotacion, id_combate, clave_transmision):

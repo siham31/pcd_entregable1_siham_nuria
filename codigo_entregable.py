@@ -212,7 +212,7 @@ class Caza_Estelar(Nave,Uni_Comb):
         			Id Combate: {self.id_combate}\tClave Transmisión: {self.clave_trans}"""
     
     def devuelveDotacion(self):
-        return f"Dotacion de {self.nombre}: {self.dotacion}"
+        return f"DotaciÓn de {self.nombre}: {self.dotacion}"
 
 class Pieza:
     """    representa una pieza de respuesto almacenada en un almacen """

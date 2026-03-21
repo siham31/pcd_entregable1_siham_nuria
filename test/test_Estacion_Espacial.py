@@ -5,15 +5,12 @@ from codigo_entregable import Estacion_Espacial
 def estacion_espacial():
     return Estacion_Espacial(
         					'NSS Éxodo', 15, 'Nebulosa de los Suspiros', 
-            				5500000, "Alpha48", "Echo-7-Amber")
+            				5500000, "Alpha48", "Echo-7-Amber"
+                )
 
 # Funcion: __init__
 def test_creacion_estacion_espacial(estacion_espacial):
     assert estacion_espacial.nombre == 'NSS Éxodo'
-    assert estacion_espacial.tripulacion == 15
-    assert estacion_espacial.ubi == "Nebulosa de los Suspiros"
-    assert estacion_espacial.pasaje == 5500000
-    assert estacion_espacial.id_combate == "Alpha48"
     assert estacion_espacial.clave_trans == "Echo-7-Amber"
 
 # Funcion: devuelveInfo

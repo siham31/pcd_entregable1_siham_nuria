@@ -31,4 +31,7 @@ def test_error_addAlmacen_duplicado(milmperio):
 def test_getAlmacen(milmperio):
     milmperio.addAlmacen('Alpha', 'Nexo de Cristal de Xylos-7')
     
-    
+    almacen = milmperio.getAlmacen('Alpha')
+    assert almacen.nombre == 'Alpha'
+    assert almacen.loc == 'Nexo de Cristal de Xylos-7'
+

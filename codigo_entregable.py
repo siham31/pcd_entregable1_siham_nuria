@@ -230,8 +230,8 @@ class Milmprerio:
     def addAlmacen(self, nombre, localizacion):
         """Añadir el almacen (nombre) con una ubicacion (localizacion) en el listado"""
         for a in self._almacenes:
-            if a == nombre:
-                raise AlmacenDuplicadoError(f"El almacen con nombre {a} ya está registrado en el sistema")
+            if a.nombre == nombre:
+                raise AlmacenDuplicadoError(f"El almacen con nombre {nombre} ya está registrado en el sistema")
         self._almacenes.append(Almacen(nombre, localizacion))
         
     def getAlmacen(self,nombre):
@@ -239,7 +239,7 @@ class Milmprerio:
         for a in self._almacenes:
             if a.nombre == nombre :  # comparamos que los nombres coinciden
                 return a
-        raise AlmacenDuplicadoError(f"Almacen {nombre} no encontrado")
+        raise AlmacenNoEncontradoError(f"Almacen {nombre} no encontrado")
     
     def listarAlmacen(self):
         """Listar todos los almacenes registrados en el sistema"""
